@@ -4,19 +4,15 @@
     <div v-if="loading">Loading...</div>
     <div v-else>
       <div v-for="category in topCategories" :key="category.id_top_category">
-        <h2>{{ category.name_category }}</h2>
         <div v-for="subCategory in category.sub_category_list" :key="subCategory.id_category">
           <h3>{{ subCategory.name_category }}</h3>
-          <ul>
-            <li v-for="book in subCategory.book_list" :key="book.id_book">
-              <router-link :to="`/book/${book.id_book}`">
-                <img :src="book.img_url" />
-              </router-link>
-              <p>{{ book.name_book }}</p>
-              <p>{{ book.author }}</p>
-              <p>{{ book.publisher }}</p>
-            </li>
-          </ul>
+          <ImageCarousel :slides="subCategory.book_list">
+            <template v-slot:default="{ slide }: any">
+              <div class="carousel-item" @click="goToDetail(slide.id_book)">
+                <img :src="slide.img_url" alt="Slide Image" style="width: 90px" />
+              </div>
+            </template>
+          </ImageCarousel>
         </div>
       </div>
     </div>
@@ -27,7 +23,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
-import type { TopCategory } from '@/types/BookTypes'
+import type { Book, TopCategory } from '@/types/BookTypes'
+import ImageCarousel from '@/components/ImageCarousel.vue'
 
 const booksStore = useBooksStore()
 const router = useRouter()
@@ -53,3 +50,11 @@ const goToDetail = (id: string) => {
   }
 }
 </script>
+<style scoped>
+.carousel-item {
+  padding: 8px;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+</style>
