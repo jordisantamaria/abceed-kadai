@@ -45,9 +45,9 @@ const updateSlidesPerView = () => {
   } else if (width >= 768) {
     slidesPerView.value = 6
   } else if (width >= 600) {
-    slidesPerView.value = 3
+    slidesPerView.value = 5
   } else {
-    slidesPerView.value = 1.5
+    slidesPerView.value = 3
   }
 }
 
