@@ -4,17 +4,17 @@
     <main>
       <MainContainer class="book-detail-container">
         <AppCard class="book-info-container">
-          <img class="book-image" :src="book.image" />
+          <img class="book-image" :src="book?.img_url" />
           <div>
-            <h2 class="book-title">{{ book.title }}</h2>
+            <h2 class="book-title">{{ book?.name_book }}</h2>
             <dl>
               <div class="book-author">
                 <AppChip is="dt">著者</AppChip>
-                <dd>Jordi Santamaria</dd>
+                <dd>{{ book?.author }}</dd>
               </div>
               <div class="book-publisher">
                 <AppChip is="dt">出版社</AppChip>
-                <dd>オライリー・ジャパン</dd>
+                <dd>{{ book?.publisher }}</dd>
               </div>
             </dl>
             <div class="book-info-buttons">
@@ -48,9 +48,8 @@ import AppChip from '@/components/AppChip.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import TitleBarWithBackButton from '@/components/TitleBarWithBackButton.vue'
 import { useMyBooksStore } from '@/stores/myBooks'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
 import IconStudyQuiz from '@/components/icons/IconStudyQuiz.vue'
 import IconStudyTest from '@/components/icons/IconStudyTest.vue'
 import IconStudySound from '@/components/icons/IconStudySound.vue'
@@ -58,6 +57,7 @@ import IconStudySw from '@/components/icons/IconStudySw.vue'
 import IconStudyVocab from '@/components/icons/IconStudyVocab.vue'
 import IconStudyMarksheet from '@/components/icons/IconStudyMarksheet.vue'
 import IconStudyRecord from '@/components/icons/IconStudyRecord.vue'
+import { useBooksStore } from '@/stores/books'
 
 const icons = [
   { id: 1, label: 'アプリ学習', component: IconStudyQuiz },
@@ -71,14 +71,12 @@ const icons = [
 const route = useRoute()
 const router = useRouter()
 
-const bookId = Number(route.params.id)
+const bookId = route.params.id as string
 
-const book = ref({
-  id: bookId,
-  title: 'Libro ' + bookId,
-  image: 'path/to/image' + bookId + '.jpg',
-})
+const booksStore = useBooksStore()
+const book = booksStore.getBookById(bookId)
 
+console.log(book)
 const myBooksStore = useMyBooksStore()
 const isInMyBooks = computed(() => myBooksStore.isInMyBooks(bookId))
 const myBooksLabel = computed(() => (isInMyBooks.value ? 'MyBooks削除' : 'MyBooks追加'))
@@ -117,6 +115,8 @@ main {
 
 .book-image {
   width: 90px;
+  object-fit: contain;
+  object-position: top;
 }
 
 .book-title {

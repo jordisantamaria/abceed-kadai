@@ -1,6 +1,5 @@
 import BookDetailView from '@/views/BookDetailView.vue'
 import BookListView from '@/views/BookListView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
