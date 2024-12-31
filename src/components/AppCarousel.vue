@@ -41,7 +41,7 @@ function onTouchStart(event: TouchEvent | MouseEvent) {
   currentTranslateX = translateX.value
   isDragging = true
   if (carouselElement.value) {
-    carouselElement.value.style.transition = 'none' // Disable transition during drag
+    carouselElement.value.style.transition = 'none' // Disable transition during drag to avoid lagging
   }
 }
 
@@ -74,7 +74,7 @@ function onTouchEnd() {
 
 function moveLeft() {
   if (canScrollLeft.value) {
-    translateX.value += SLIDE_WIDTH
+    translateX.value = Math.min(translateX.value + SLIDE_WIDTH, 0)
   }
 }
 
