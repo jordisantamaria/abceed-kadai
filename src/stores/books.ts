@@ -13,8 +13,6 @@ export const useBooksStore = defineStore('books', () => {
   }
 
   const getBookById = computed(() => (id: string) => {
-    console.log('id', id)
-    console.log('books', books.value)
     for (const category of books.value) {
       for (const subCategory of category.sub_category_list) {
         console.log('booklist', subCategory.book_list)

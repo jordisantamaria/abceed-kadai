@@ -48,7 +48,7 @@ import AppChip from '@/components/AppChip.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import TitleBarWithBackButton from '@/components/TitleBarWithBackButton.vue'
 import { useMyBooksStore } from '@/stores/myBooks'
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import IconStudyQuiz from '@/components/icons/IconStudyQuiz.vue'
 import IconStudyTest from '@/components/icons/IconStudyTest.vue'
@@ -58,6 +58,7 @@ import IconStudyVocab from '@/components/icons/IconStudyVocab.vue'
 import IconStudyMarksheet from '@/components/icons/IconStudyMarksheet.vue'
 import IconStudyRecord from '@/components/icons/IconStudyRecord.vue'
 import { useBooksStore } from '@/stores/books'
+import type { Book } from '@/types/BookTypes'
 
 const icons = [
   { id: 1, label: 'アプリ学習', component: IconStudyQuiz },
@@ -74,7 +75,19 @@ const router = useRouter()
 const bookId = route.params.id as string
 
 const booksStore = useBooksStore()
-const book = booksStore.getBookById(bookId)
+const book = ref<Book | null>(null)
+
+onMounted(async () => {
+  if (!booksStore.books.length) {
+    await booksStore.fetchBooks()
+  }
+  const fetchedBook = booksStore.getBookById(bookId)
+  if (fetchedBook) {
+    book.value = fetchedBook
+  } else {
+    router.push('/')
+  }
+})
 
 console.log(book)
 const myBooksStore = useMyBooksStore()
