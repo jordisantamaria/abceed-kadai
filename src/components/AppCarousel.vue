@@ -141,6 +141,7 @@ onBeforeUnmount(() => {
 .carousel-slides {
   display: flex;
   width: 100%;
+  gap: 16px;
   user-select: none;
   transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1); /* Default transition */
 }

@@ -1,11 +1,14 @@
 <template>
   <div>
-    <h1>Lista de Libros</h1>
     <div v-if="loading">Loading...</div>
     <div v-else>
-      <div v-for="category in topCategories" :key="category.id_top_category">
+      <div
+        class="category-container"
+        v-for="category in topCategories"
+        :key="category.id_top_category"
+      >
         <div v-for="subCategory in category.sub_category_list" :key="subCategory.id_category">
-          <h3>{{ subCategory.name_category }}</h3>
+          <h3 class="category-title">{{ subCategory.name_category }}</h3>
           <AppCarousel :slides="subCategory.book_list" :slideWidth="106">
             <template v-slot:default="{ slide }: any">
               <div class="carousel-item" @click="handleClick(slide.id_book)">
@@ -58,7 +61,6 @@ const handleClick = (id: string) => {
 <style scoped>
 .carousel-item {
   cursor: pointer;
-  padding: 8px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
@@ -67,5 +69,17 @@ const handleClick = (id: string) => {
 
 .carousel-item:hover {
   opacity: 0.7;
+}
+
+.category-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.category-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 14px;
 }
 </style>
