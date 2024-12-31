@@ -3,7 +3,7 @@
     <TitleBarWithBackButton title="書籍詳細" @onGoBack="goBack" />
     <main>
       <MainContainer class="book-detail-container">
-        <div class="book-info-container">
+        <AppCard class="book-info-container">
           <img class="book-image" :src="book.image" />
           <div>
             <h2 class="book-title">{{ book.title }}</h2>
@@ -18,16 +18,23 @@
               </div>
             </dl>
             <div class="book-info-buttons">
-              <button @click="toggleMyBooks">{{ myBooksLabel }}</button>
-              <button>読み放題中</button>
+              <AppButton variant="outline-primary" @click="toggleMyBooks">{{
+                myBooksLabel
+              }}</AppButton>
+              <AppButton variant="primary">読み放題中</AppButton>
             </div>
           </div>
-        </div>
+        </AppCard>
         <div class="icons-container">
-          <button v-for="icon in icons" :key="icon.id">
-            <img :src="icon.image" />
+          <AppButton
+            variant="outline-input"
+            class="icon-button"
+            v-for="icon in icons"
+            :key="icon.id"
+          >
+            <component :is="icon.component" />
             <p>{{ icon.label }}</p>
-          </button>
+          </AppButton>
         </div>
       </MainContainer>
     </main>
@@ -35,17 +42,31 @@
 </template>
 
 <script setup lang="ts">
+import AppButton from '@/components/AppButton.vue'
+import AppCard from '@/components/AppCard.vue'
 import AppChip from '@/components/AppChip.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import TitleBarWithBackButton from '@/components/TitleBarWithBackButton.vue'
 import { useMyBooksStore } from '@/stores/myBooks'
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
+import IconStudyQuiz from '@/components/icons/IconStudyQuiz.vue'
+import IconStudyTest from '@/components/icons/IconStudyTest.vue'
+import IconStudySound from '@/components/icons/IconStudySound.vue'
+import IconStudySw from '@/components/icons/IconStudySw.vue'
+import IconStudyVocab from '@/components/icons/IconStudyVocab.vue'
+import IconStudyMarksheet from '@/components/icons/IconStudyMarksheet.vue'
+import IconStudyRecord from '@/components/icons/IconStudyRecord.vue'
 
 const icons = [
-  { id: 1, label: 'ブックマーク', image: 'path/to/image1.jpg' },
-  { id: 2, label: 'ブックマーク', image: 'path/to/image2.jpg' },
-  { id: 3, label: 'ブックマーク', image: 'path/to/image3.jpg' },
+  { id: 1, label: 'アプリ学習', component: IconStudyQuiz },
+  { id: 2, label: 'テスト', component: IconStudyTest },
+  { id: 3, label: '音声（無料）', component: IconStudySound },
+  { id: 4, label: 'SWトレ', component: IconStudySw },
+  { id: 5, label: '単語一覧', component: IconStudyVocab },
+  { id: 6, label: 'マークーシート', component: IconStudyMarksheet },
+  { id: 7, label: '学習記録', component: IconStudyRecord },
 ]
 const route = useRoute()
 const router = useRouter()
@@ -82,14 +103,16 @@ main {
 
 .book-detail-container {
   padding-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 20px;
+  padding-bottom: 20px;
+  justify-content: center;
 }
 
 .book-info-container {
   display: flex;
   gap: 10px;
+  width: 450px;
 }
 
 .book-image {
@@ -99,6 +122,7 @@ main {
 .book-title {
   font-size: 20px;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .book-author {
@@ -106,6 +130,7 @@ main {
   align-items: center;
   gap: 5px;
   color: #929292;
+  margin-bottom: 5px;
 }
 
 .book-publisher {
@@ -113,13 +138,28 @@ main {
   align-items: center;
   gap: 5px;
   color: #929292;
+  margin-bottom: 10px;
 }
 
 .book-info-buttons {
-  /* Add your styles here */
+  display: flex;
+  gap: 10px;
 }
 
 .icons-container {
-  /* Add your styles here */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.icon-button {
+  height: 86px;
+  width: 86px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.icon-button svg {
+  color: #ff223c;
 }
 </style>
