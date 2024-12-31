@@ -1,42 +1,46 @@
 <template>
   <div>
-    <h1>書籍詳細</h1>
-    <div class="book-detail-container">
-      <div class="book-info-container">
-        <img class="book-image" :src="book.image" />
-        <div>
-          <h2 class="book-title">{{ book.title }}</h2>
-          <dl>
-            <div class="book-author">
-              <AppChip is="dt">著者</AppChip>
-              <dd>Jordi Santamaria</dd>
+    <TitleBarWithBackButton title="書籍詳細" @onGoBack="goBack" />
+    <main>
+      <MainContainer class="book-detail-container">
+        <div class="book-info-container">
+          <img class="book-image" :src="book.image" />
+          <div>
+            <h2 class="book-title">{{ book.title }}</h2>
+            <dl>
+              <div class="book-author">
+                <AppChip is="dt">著者</AppChip>
+                <dd>Jordi Santamaria</dd>
+              </div>
+              <div class="book-publisher">
+                <AppChip is="dt">出版社</AppChip>
+                <dd>オライリー・ジャパン</dd>
+              </div>
+            </dl>
+            <div class="book-info-buttons">
+              <button @click="toggleMyBooks">{{ myBooksLabel }}</button>
+              <button>読み放題中</button>
             </div>
-            <div class="book-publisher">
-              <AppChip is="dt">出版社</AppChip>
-              <dd>オライリー・ジャパン</dd>
-            </div>
-          </dl>
-          <div class="book-info-buttons">
-            <button @click="toggleMyBooks">{{ myBooksLabel }}</button>
-            <button>読み放題中</button>
           </div>
         </div>
-      </div>
-      <div class="icons-container">
-        <button v-for="icon in icons" :key="icon.id">
-          <img :src="icon.image" />
-          <p>{{ icon.label }}</p>
-        </button>
-      </div>
-    </div>
+        <div class="icons-container">
+          <button v-for="icon in icons" :key="icon.id">
+            <img :src="icon.image" />
+            <p>{{ icon.label }}</p>
+          </button>
+        </div>
+      </MainContainer>
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import AppChip from '@/components/AppChip.vue'
+import MainContainer from '@/components/MainContainer.vue'
+import TitleBarWithBackButton from '@/components/TitleBarWithBackButton.vue'
 import { useMyBooksStore } from '@/stores/myBooks'
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const icons = [
   { id: 1, label: 'ブックマーク', image: 'path/to/image1.jpg' },
@@ -44,6 +48,7 @@ const icons = [
   { id: 3, label: 'ブックマーク', image: 'path/to/image3.jpg' },
 ]
 const route = useRoute()
+const router = useRouter()
 
 const bookId = Number(route.params.id)
 
@@ -64,15 +69,22 @@ const toggleMyBooks = () => {
     myBooksStore.addToMyBooks(bookId)
   }
 }
+
+function goBack() {
+  router.push('/')
+}
 </script>
 
-<style>
+<style scoped>
+main {
+  background: #fafafa;
+}
+
 .book-detail-container {
   padding-top: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  background: #fafafa;
 }
 
 .book-info-container {

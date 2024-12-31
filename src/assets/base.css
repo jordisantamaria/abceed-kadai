@@ -23,6 +23,8 @@
 
 /* semantic color variables for this project */
 :root {
+  --color-primary: #3498db; /* Light theme primary color */
+  --color-secondary: #2ecc71; /* Light theme secondary color */
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
@@ -38,6 +40,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-primary: #2980b9; /* Dark theme primary color */
+    --color-secondary: #27ae60; /* Dark theme secondary color */
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);
@@ -83,4 +87,14 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  appearance: none;
+  background-color: transparent;
+  background-image: none;
+  border: none;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <MainContainer is="main" class="book-list-container">
     <div v-if="loading">Loading...</div>
     <div v-else>
       <div
@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </MainContainer>
 </template>
 
 <script setup lang="ts">
@@ -28,6 +28,7 @@ import { useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
 import type { TopCategory } from '@/types/BookTypes'
 import AppCarousel from '@/components/AppCarousel.vue'
+import MainContainer from '@/components/MainContainer.vue'
 
 const booksStore = useBooksStore()
 const router = useRouter()
@@ -59,6 +60,10 @@ const handleClick = (id: string) => {
 }
 </script>
 <style scoped>
+.book-list-container {
+  padding: 2rem;
+}
+
 .carousel-item {
   cursor: pointer;
   display: flex;
