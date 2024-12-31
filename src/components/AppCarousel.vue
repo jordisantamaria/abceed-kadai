@@ -39,6 +39,8 @@ const canScrollRight = computed(
 let startX = 0
 let currentTranslateX = 0
 let isDragging = false
+let lastUpdate = 0
+const THROTTLE_DELAY = 16 // Approximately 60fps
 
 function onTouchStart(event: TouchEvent | MouseEvent) {
   startX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
@@ -51,6 +53,11 @@ function onTouchStart(event: TouchEvent | MouseEvent) {
 
 function onTouchMove(event: TouchEvent | MouseEvent) {
   if (!isDragging) return
+
+  const now = Date.now()
+  if (now - lastUpdate < THROTTLE_DELAY) return
+  lastUpdate = now
+
   const currentX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
   const deltaX = currentX - startX
   translateX.value = currentTranslateX + deltaX
