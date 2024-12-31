@@ -57,9 +57,15 @@ const handleClick = (id: string) => {
 </script>
 <style scoped>
 .carousel-item {
+  cursor: pointer;
   padding: 8px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
+  transition: opacity 0.3s ease;
+}
+
+.carousel-item:hover {
+  opacity: 0.7;
 }
 </style>
