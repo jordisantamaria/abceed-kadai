@@ -24,12 +24,7 @@ const carouselWidth = ref(0)
 const slidesWidth = ref(0)
 const carouselElement = ref<HTMLElement | null>(null)
 
-function updateCarouselWidth() {
-  if (carouselElement.value) {
-    carouselWidth.value = carouselElement.value.clientWidth
-    slidesWidth.value = carouselElement.value.scrollWidth
-  }
-}
+const SLIDE_WIDTH = 90 + 16 // Slide width including padding
 
 const canScroll = computed(() => slidesWidth.value > carouselWidth.value)
 const canScrollLeft = computed(() => canScroll.value && translateX.value < 0)
@@ -37,27 +32,90 @@ const canScrollRight = computed(
   () => canScroll.value && translateX.value > carouselWidth.value - slidesWidth.value,
 )
 
-onMounted(() => {
-  updateCarouselWidth()
-  window.addEventListener('resize', updateCarouselWidth)
-})
+let startX = 0
+let currentTranslateX = 0
+let isDragging = false
 
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateCarouselWidth)
-})
+function onTouchStart(event: TouchEvent | MouseEvent) {
+  startX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
+  currentTranslateX = translateX.value
+  isDragging = true
+  if (carouselElement.value) {
+    carouselElement.value.style.transition = 'none' // Disable transition during drag
+  }
+}
+
+function onTouchMove(event: TouchEvent | MouseEvent) {
+  if (!isDragging) return
+  const currentX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
+  const deltaX = currentX - startX
+  translateX.value = currentTranslateX + deltaX
+}
+
+function onTouchEnd() {
+  if (!isDragging) return
+  isDragging = false
+  if (carouselElement.value) {
+    carouselElement.value.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)' // Re-enable transition with bounce effect
+  }
+  const movedBy = translateX.value - currentTranslateX
+  if (Math.abs(movedBy) > SLIDE_WIDTH * 0.35) {
+    if (movedBy < 0) {
+      moveRight()
+    } else {
+      moveLeft()
+    }
+  } else {
+    translateX.value = currentTranslateX
+  }
+}
 
 function moveLeft() {
-  if (canScroll.value && translateX.value < 0) {
-    translateX.value += 90 + 16
+  if (canScrollLeft.value) {
+    translateX.value += SLIDE_WIDTH
   }
 }
 
 function moveRight() {
-  if (canScroll.value) {
+  if (canScrollRight.value) {
     const maxNegativeTranslateX = Math.min(0, carouselWidth.value - slidesWidth.value)
-    translateX.value = Math.max(translateX.value - (90 + 16), maxNegativeTranslateX)
+    translateX.value = Math.max(translateX.value - SLIDE_WIDTH, maxNegativeTranslateX)
   }
 }
+
+function updateCarouselWidth() {
+  if (carouselElement.value) {
+    carouselWidth.value = carouselElement.value.clientWidth
+    slidesWidth.value = carouselElement.value.scrollWidth
+  }
+}
+
+onMounted(() => {
+  updateCarouselWidth()
+  window.addEventListener('resize', updateCarouselWidth)
+  if (carouselElement.value) {
+    carouselElement.value.addEventListener('touchstart', onTouchStart)
+    carouselElement.value.addEventListener('touchmove', onTouchMove)
+    carouselElement.value.addEventListener('touchend', onTouchEnd)
+    carouselElement.value.addEventListener('mousedown', onTouchStart)
+    carouselElement.value.addEventListener('mousemove', onTouchMove)
+    carouselElement.value.addEventListener('mouseup', onTouchEnd)
+    carouselElement.value.addEventListener('mouseleave', onTouchEnd)
+  }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateCarouselWidth)
+  if (carouselElement.value) {
+    carouselElement.value.removeEventListener('touchstart', onTouchStart)
+    carouselElement.value.removeEventListener('touchmove', onTouchMove)
+    carouselElement.value.removeEventListener('touchend', onTouchEnd)
+    carouselElement.value.removeEventListener('mousedown', onTouchStart)
+    carouselElement.value.removeEventListener('mousemove', onTouchMove)
+    carouselElement.value.removeEventListener('mouseup', onTouchEnd)
+    carouselElement.value.removeEventListener('mouseleave', onTouchEnd)
+  }
+})
 </script>
 
 <style scoped>
@@ -72,7 +130,7 @@ function moveRight() {
   width: 100%;
   user-select: none;
   pointer-events: none;
-  transition: transform 0.3s ease-out;
+  transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1); /* Default transition */
 }
 
 .carousel-arrow {
