@@ -37,7 +37,11 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    topCategories.value = await booksStore.fetchBooks()
+    if (booksStore.books.length === 0) {
+      topCategories.value = await booksStore.fetchBooks()
+    } else {
+      topCategories.value = booksStore.books
+    }
   } catch (error) {
     console.error('Failed to fetch books:', error)
   } finally {

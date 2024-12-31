@@ -1,7 +1,7 @@
 <template>
   <div>
     <TitleBarWithBackButton title="書籍詳細" @onGoBack="goBack" />
-    <main>
+    <main v-if="book">
       <MainContainer class="book-detail-container">
         <AppCard class="book-info-container">
           <img class="book-image" :src="book?.img_url" />
@@ -38,6 +38,7 @@
         </div>
       </MainContainer>
     </main>
+    <div v-else class="loading-message">Loading book details...</div>
   </div>
 </template>
 
@@ -174,5 +175,12 @@ main {
 
 .icon-button svg {
   color: #ff223c;
+}
+
+.loading-message {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-top: 20px;
 }
 </style>
