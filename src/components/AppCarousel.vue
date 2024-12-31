@@ -1,17 +1,17 @@
 <template>
-  <div class="carousel">
-    <button class="carousel-arrow left" @click="moveLeft">‹</button>
+  <div class="carousel" ref="carouselElement">
+    <button v-if="canScrollLeft" class="carousel-arrow left" @click="moveLeft">‹</button>
     <div class="carousel-slides" :style="{ transform: `translateX(${translateX}px)` }">
       <div v-for="(slide, index) in slides" :key="index">
         <slot :slide="slide" />
       </div>
     </div>
-    <button class="carousel-arrow right" @click="moveRight">›</button>
+    <button v-if="canScrollRight" class="carousel-arrow right" @click="moveRight">›</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 
 interface ImageCarouselProps<T> {
   slides: T[]
@@ -20,21 +20,50 @@ interface ImageCarouselProps<T> {
 defineProps<ImageCarouselProps<unknown>>()
 
 const translateX = ref(0)
+const carouselWidth = ref(0)
+const slidesWidth = ref(0)
+const carouselElement = ref<HTMLElement | null>(null)
+
+function updateCarouselWidth() {
+  if (carouselElement.value) {
+    carouselWidth.value = carouselElement.value.clientWidth
+    slidesWidth.value = carouselElement.value.scrollWidth
+  }
+}
+
+const canScroll = computed(() => slidesWidth.value > carouselWidth.value)
+const canScrollLeft = computed(() => canScroll.value && translateX.value < 0)
+const canScrollRight = computed(
+  () => canScroll.value && translateX.value > carouselWidth.value - slidesWidth.value,
+)
+
+onMounted(() => {
+  updateCarouselWidth()
+  window.addEventListener('resize', updateCarouselWidth)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateCarouselWidth)
+})
 
 function moveLeft() {
-  translateX.value += 90 + 16
+  if (canScroll.value && translateX.value < 0) {
+    translateX.value += 90 + 16
+  }
 }
 
 function moveRight() {
-  translateX.value -= 90 + 16
+  if (canScroll.value) {
+    const maxNegativeTranslateX = Math.min(0, carouselWidth.value - slidesWidth.value)
+    translateX.value = Math.max(translateX.value - (90 + 16), maxNegativeTranslateX)
+  }
 }
 </script>
 
 <style scoped>
 .carousel {
   position: relative;
-  /* width: 100%; */
-  width: 600px;
+  width: 100%;
   overflow: hidden;
 }
 
