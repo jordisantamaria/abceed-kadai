@@ -6,13 +6,13 @@
       <div v-for="category in topCategories" :key="category.id_top_category">
         <div v-for="subCategory in category.sub_category_list" :key="subCategory.id_category">
           <h3>{{ subCategory.name_category }}</h3>
-          <ImageCarousel :slides="subCategory.book_list">
+          <AppCarousel :slides="subCategory.book_list">
             <template v-slot:default="{ slide }: any">
               <div class="carousel-item" @click="goToDetail(slide.id_book)">
                 <img :src="slide.img_url" alt="Slide Image" style="width: 90px" />
               </div>
             </template>
-          </ImageCarousel>
+          </AppCarousel>
         </div>
       </div>
     </div>
@@ -23,8 +23,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
-import type { Book, TopCategory } from '@/types/BookTypes'
-import ImageCarousel from '@/components/ImageCarousel.vue'
+import type { TopCategory } from '@/types/BookTypes'
+import AppCarousel from '@/components/AppCarousel.vue'
 
 const booksStore = useBooksStore()
 const router = useRouter()
