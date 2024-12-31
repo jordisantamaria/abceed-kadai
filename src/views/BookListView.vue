@@ -6,7 +6,7 @@
       <div v-for="category in topCategories" :key="category.id_top_category">
         <div v-for="subCategory in category.sub_category_list" :key="subCategory.id_category">
           <h3>{{ subCategory.name_category }}</h3>
-          <AppCarousel :slides="subCategory.book_list">
+          <AppCarousel :slides="subCategory.book_list" :slideWidth="106">
             <template v-slot:default="{ slide }: any">
               <div class="carousel-item" @click="handleClick(slide.id_book)">
                 <img :src="slide.img_url" alt="Slide Image" style="width: 90px" />

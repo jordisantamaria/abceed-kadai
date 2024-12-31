@@ -19,16 +19,15 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 
 interface ImageCarouselProps<T> {
   slides: T[]
+  slideWidth: number
 }
 
-defineProps<ImageCarouselProps<unknown>>()
+const props = defineProps<ImageCarouselProps<unknown>>()
 
 const translateX = ref(0)
 const carouselWidth = ref(0)
 const slidesWidth = ref(0)
 const carouselElement = ref<HTMLElement | null>(null)
-
-const SLIDE_WIDTH = 90 + 16 // Slide width including padding
 
 const canScroll = computed(() => slidesWidth.value > carouselWidth.value)
 const canScrollLeft = computed(() => canScroll.value && translateX.value < 0)
@@ -74,7 +73,7 @@ function onTouchEnd() {
     carouselElement.value.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)' // Re-enable transition with bounce effect
   }
   const movedBy = translateX.value - currentTranslateX
-  if (Math.abs(movedBy) > SLIDE_WIDTH * 0.35) {
+  if (Math.abs(movedBy) > props.slideWidth * 0.35) {
     if (movedBy < 0 && canScrollRight.value) {
       moveRight()
     } else if (movedBy > 0 && canScrollLeft.value) {
@@ -85,14 +84,14 @@ function onTouchEnd() {
 
 function moveLeft() {
   if (canScrollLeft.value) {
-    translateX.value = Math.min(translateX.value + SLIDE_WIDTH, 0)
+    translateX.value = Math.min(translateX.value + props.slideWidth, 0)
   }
 }
 
 function moveRight() {
   if (canScrollRight.value) {
     const maxNegativeTranslateX = Math.min(0, carouselWidth.value - slidesWidth.value)
-    translateX.value = Math.max(translateX.value - SLIDE_WIDTH, maxNegativeTranslateX)
+    translateX.value = Math.max(translateX.value - props.slideWidth, maxNegativeTranslateX)
   }
 }
 
