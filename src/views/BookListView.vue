@@ -8,7 +8,7 @@
           <h3>{{ subCategory.name_category }}</h3>
           <AppCarousel :slides="subCategory.book_list">
             <template v-slot:default="{ slide }: any">
-              <div class="carousel-item" @click="goToDetail(slide.id_book)">
+              <div class="carousel-item" @click="handleClick(slide.id_book)">
                 <img :src="slide.img_url" alt="Slide Image" style="width: 90px" />
               </div>
             </template>
@@ -48,6 +48,11 @@ const goToDetail = (id: string) => {
   } else {
     console.error('Invalid book ID:', id)
   }
+}
+
+const handleClick = (id: string) => {
+  console.log('Carousel item clicked with ID:', id)
+  goToDetail(id)
 }
 </script>
 <style scoped>

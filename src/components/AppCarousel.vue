@@ -1,7 +1,11 @@
 <template>
   <div class="carousel" ref="carouselElement">
     <button v-if="canScrollLeft" class="carousel-arrow left" @click="moveLeft">‹</button>
-    <div class="carousel-slides" :style="{ transform: `translateX(${translateX}px)` }">
+    <div
+      class="carousel-slides"
+      :class="{ 'no-pointer-events': isDragging }"
+      :style="{ transform: `translateX(${translateX}px)` }"
+    >
       <div v-for="(slide, index) in slides" :key="index">
         <slot :slide="slide" />
       </div>
@@ -132,8 +136,11 @@ onBeforeUnmount(() => {
   display: flex;
   width: 100%;
   user-select: none;
-  pointer-events: none;
   transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1); /* Default transition */
+}
+
+.no-pointer-events {
+  pointer-events: none;
 }
 
 .carousel-arrow {
