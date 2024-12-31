@@ -67,7 +67,7 @@ const icons = [
   { id: 3, label: '音声（無料）', component: IconStudySound },
   { id: 4, label: 'SWトレ', component: IconStudySw },
   { id: 5, label: '単語一覧', component: IconStudyVocab },
-  { id: 6, label: 'マークーシート', component: IconStudyMarksheet },
+  { id: 6, label: 'マークシート', component: IconStudyMarksheet },
   { id: 7, label: '学習記録', component: IconStudyRecord },
 ]
 const route = useRoute()

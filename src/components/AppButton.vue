@@ -33,6 +33,7 @@ const buttonClass = computed(() => ({
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   transition:
     background 0.2s,
     border 0.2s,
