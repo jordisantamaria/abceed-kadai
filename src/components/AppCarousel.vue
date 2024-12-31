@@ -50,6 +50,10 @@ function onTouchMove(event: TouchEvent | MouseEvent) {
   const currentX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
   const deltaX = currentX - startX
   translateX.value = currentTranslateX + deltaX
+
+  // Clamp the translateX value to prevent overscrolling
+  const maxNegativeTranslateX = Math.min(0, carouselWidth.value - slidesWidth.value)
+  translateX.value = Math.max(Math.min(translateX.value, 0), maxNegativeTranslateX)
 }
 
 function onTouchEnd() {
@@ -60,13 +64,11 @@ function onTouchEnd() {
   }
   const movedBy = translateX.value - currentTranslateX
   if (Math.abs(movedBy) > SLIDE_WIDTH * 0.35) {
-    if (movedBy < 0) {
+    if (movedBy < 0 && canScrollRight.value) {
       moveRight()
-    } else {
+    } else if (movedBy > 0 && canScrollLeft.value) {
       moveLeft()
     }
-  } else {
-    translateX.value = currentTranslateX
   }
 }
 
@@ -123,6 +125,7 @@ onBeforeUnmount(() => {
   position: relative;
   width: 100%;
   overflow: hidden;
+  user-select: none;
 }
 
 .carousel-slides {
