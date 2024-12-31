@@ -41,19 +41,19 @@ const buttonClass = computed(() => ({
 }
 
 .app-button--primary {
-  background: #ff223c;
+  background: var(--color-primary);
   color: #fff;
   border: none;
 }
 
 .app-button--outline-primary {
   background: transparent;
-  color: #ff223c;
-  border: 1px solid #ff223c;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .app-button--outline-input {
-  border: 1px solid #f3f3f3;
+  border: 1px solid var(--color-outline-input-border);
   padding: 12px;
   border-radius: 5px;
   background: #fff;
@@ -61,15 +61,15 @@ const buttonClass = computed(() => ({
 
 .app-button--primary:hover {
   /* Hover effects for primary and outline-primary */
-  background: #e12037;
+  background: var(--color-primary-hover);
 }
 
 .app-button--outline-primary:hover,
 .app-button--outline-input:hover {
-  background: #ffebeb; /* Light background on hover */
+  background: var(--color-outline-hover);
 }
 
 .app-button--outline-input:hover {
-  border: 1px solid #ff223c;
+  border: 1px solid var(--color-primary);
 }
 </style>

@@ -13,9 +13,9 @@ defineProps<{
 
 <style scoped>
 .card {
-  border: 1px solid #f3f3f3;
+  border: 1px solid var(--color-card-border);
   padding: 12px;
   border-radius: 5px;
-  background: #fff;
+  background: var(--color-background-main);
 }
 </style>

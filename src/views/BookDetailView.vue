@@ -143,7 +143,7 @@ main {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #929292;
+  color: var(--color-text-muted);
   margin-bottom: 5px;
 }
 
@@ -151,7 +151,7 @@ main {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #929292;
+  color: var(--color-text-muted);
   margin-bottom: 10px;
 }
 
@@ -180,7 +180,7 @@ main {
 .loading-message {
   text-align: center;
   font-size: 18px;
-  color: #555;
+  color: var(--color-loading-text);
   margin-top: 20px;
 }
 </style>
