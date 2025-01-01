@@ -15,7 +15,6 @@ export const useBooksStore = defineStore('books', () => {
   const getBookById = computed(() => (id: string) => {
     for (const category of books.value) {
       for (const subCategory of category.sub_category_list) {
-        console.log('booklist', subCategory.book_list)
         const book = subCategory.book_list.find((book) => book.id_book === id)
         if (book) return book
       }
