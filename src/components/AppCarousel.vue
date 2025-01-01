@@ -3,11 +3,7 @@
     <button v-if="canScrollLeft" class="carousel-arrow left" @click="moveLeft">
       <IconChevronLeft />
     </button>
-    <div
-      class="carousel-slides"
-      :class="{ 'no-pointer-events': isDragging }"
-      :style="{ transform: `translateX(${translateX}px)` }"
-    >
+    <div class="carousel-slides" :style="{ transform: `translateX(${translateX}px)` }">
       <div v-for="(slide, index) in slides" :key="index">
         <slot :slide="slide" />
       </div>
@@ -135,7 +131,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
+<style>
 .carousel {
   position: relative;
   width: 100%;
@@ -149,6 +145,10 @@ onBeforeUnmount(() => {
   gap: 16px;
   user-select: none;
   transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1); /* Default transition */
+}
+
+.carousel-slides img {
+  pointer-events: none;
 }
 
 .no-pointer-events {
