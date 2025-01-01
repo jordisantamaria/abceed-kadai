@@ -3,7 +3,7 @@
     <button @click="goBack" class="back-button">
       <IconChevronLeft width="32" height="32" />
     </button>
-    <h1>{{ title }}</h1>
+    <h2>{{ title }}</h2>
   </MainContainer>
 </template>
 
@@ -29,6 +29,7 @@ function goBack() {
 .title-bar {
   display: flex;
   align-items: center;
+  padding: 0;
 }
 
 .back-button {

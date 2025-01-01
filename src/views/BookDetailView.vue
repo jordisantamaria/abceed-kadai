@@ -3,10 +3,11 @@
     <TitleBarWithBackButton title="書籍詳細" @onGoBack="goBack" />
     <main v-if="book">
       <MainContainer class="book-detail-container">
-        <AppCard class="book-info-container">
+        <!-- Left -->
+        <div class="book-info-container">
           <img class="book-image" :src="book?.img_url" />
           <div>
-            <h2 class="book-title">{{ book?.name_book }}</h2>
+            <h1 class="book-title">{{ book?.name_book }}</h1>
             <dl>
               <div class="book-author">
                 <AppChip is="dt">著者</AppChip>
@@ -24,7 +25,8 @@
               <AppButton variant="primary">読み放題中</AppButton>
             </div>
           </div>
-        </AppCard>
+        </div>
+        <!-- Right -->
         <div class="icons-container">
           <AppButton
             variant="outline-input"
@@ -44,7 +46,6 @@
 
 <script setup lang="ts">
 import AppButton from '@/components/AppButton.vue'
-import AppCard from '@/components/AppCard.vue'
 import AppChip from '@/components/AppChip.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import TitleBarWithBackButton from '@/components/TitleBarWithBackButton.vue'
@@ -90,7 +91,6 @@ onMounted(async () => {
   }
 })
 
-console.log(book)
 const myBooksStore = useMyBooksStore()
 const isInMyBooks = computed(() => myBooksStore.isInMyBooks(bookId))
 const myBooksLabel = computed(() => (isInMyBooks.value ? 'MyBooks削除' : 'MyBooks追加'))
@@ -114,19 +114,32 @@ main {
 }
 
 .book-detail-container {
-  padding-top: 20px;
   display: flex;
   gap: 20px;
-  padding-bottom: 20px;
+  padding: 0;
+  flex-direction: column;
+
   justify-content: center;
+  @media (min-width: 768px) {
+    padding: 20px 32px;
+    flex-direction: row;
+  }
 }
 
 .book-info-container {
   display: flex;
   gap: 12px;
-  width: 450px;
-  padding: 20px;
+
   padding-bottom: 24px;
+  background: var(--color-background);
+  padding: 20px 16px;
+
+  @media (min-width: 768px) {
+    max-width: 450px;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid var(--color-outline-input-border);
+  }
 }
 
 .book-image {
@@ -166,13 +179,19 @@ main {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+  padding: 0 16px 20px 16px;
+  height: fit-content;
+  @media (min-width: 768px) {
+    padding: 0;
+  }
 }
 
 .icon-button {
-  height: 100%;
-  width: 100%;
+  height: 70px;
+  width: 70px;
   flex-direction: column;
   gap: 5px;
+  padding: 0;
 }
 
 .icon-button svg {
