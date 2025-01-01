@@ -1,6 +1,8 @@
 <template>
   <div class="carousel" ref="carouselElement">
-    <button v-if="canScrollLeft" class="carousel-arrow left" @click="moveLeft">‹</button>
+    <button v-if="canScrollLeft" class="carousel-arrow left" @click="moveLeft">
+      <IconChevronLeft />
+    </button>
     <div
       class="carousel-slides"
       :class="{ 'no-pointer-events': isDragging }"
@@ -10,12 +12,15 @@
         <slot :slide="slide" />
       </div>
     </div>
-    <button v-if="canScrollRight" class="carousel-arrow right" @click="moveRight">›</button>
+    <button v-if="canScrollRight" class="carousel-arrow right" @click="moveRight">
+      <IconChevronLeft style="transform: rotate(180deg)" />
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
 
 interface ImageCarouselProps<T> {
   slides: T[]
@@ -152,21 +157,35 @@ onBeforeUnmount(() => {
 
 .carousel-arrow {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  bottom: 0;
+  width: 50px; /* Adjust width as needed */
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
   color: white;
   border: none;
-  padding: 10px;
   cursor: pointer;
   z-index: 1;
+  display: none; /* Hide by default */
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-arrow svg {
+  height: 30px;
+  width: 30px;
 }
 
 .carousel-arrow.left {
-  left: 10px;
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), transparent);
 }
 
 .carousel-arrow.right {
-  right: 10px;
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.carousel:hover .carousel-arrow {
+  display: flex; /* Show on hover */
 }
 </style>
