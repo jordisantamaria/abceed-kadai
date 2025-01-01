@@ -18,7 +18,7 @@ defineProps<{
   font-size: 12px;
   text-align: center;
   color: var(--color-text-muted);
-  background-color: var(--color-outline-input-border);
+  background-color: var(--color-chip);
   border-radius: 2px; /* Border radius */
 }
 </style>

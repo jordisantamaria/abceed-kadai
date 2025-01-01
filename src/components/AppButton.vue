@@ -42,7 +42,7 @@ const buttonClass = computed(() => ({
 
 .app-button--primary {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-background);
   border: none;
 }
 
@@ -56,7 +56,8 @@ const buttonClass = computed(() => ({
   border: 1px solid var(--color-outline-input-border);
   padding: 12px;
   border-radius: 5px;
-  background: #fff;
+  background: var(--color-background);
+  color: var(--color-text);
 }
 
 .app-button--primary:hover {

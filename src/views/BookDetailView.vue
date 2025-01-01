@@ -110,7 +110,7 @@ function goBack() {
 
 <style scoped>
 main {
-  background: #fafafa;
+  background: var(--color-background-muted);
 }
 
 .book-detail-container {
@@ -123,8 +123,10 @@ main {
 
 .book-info-container {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   width: 450px;
+  padding: 20px;
+  padding-bottom: 24px;
 }
 
 .book-image {
@@ -167,14 +169,14 @@ main {
 }
 
 .icon-button {
-  height: 86px;
-  width: 86px;
+  height: 100%;
+  width: 100%;
   flex-direction: column;
   gap: 5px;
 }
 
 .icon-button svg {
-  color: #ff223c;
+  color: var(--color-primary);
 }
 
 .loading-message {

@@ -1,25 +1,31 @@
 /* semantic color variables for this project */
 :root {
+  --color-background: #fff;
+  --color-background-muted: #fafafa;
+  --color-text: #212121;
+  --color-text-muted: #929292;
+  --color-loading-text: #555;
+
   --color-primary: #ff223c;
   --color-primary-hover: #e12037;
   --color-outline-hover: #ffebeb;
   --color-outline-input-border: #f3f3f3;
-  --color-card-border: #f3f3f3;
-  --color-background-main: #fafafa;
-  --color-text-muted: #929292;
-  --color-loading-text: #555;
+  --color-chip: #f6f6f6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-primary: #ff223c;
-    --color-primary-hover: #e12037;
-    --color-outline-hover: #ffebeb;
-    --color-outline-input-border: #f3f3f3;
-    --color-card-border: #f3f3f3;
-    --color-background-main: #fafafa;
-    --color-text-muted: #929292;
+    --color-background: #212121;
+    --color-background-muted: #3b3b3b;
+    --color-text: #fff;
+    --color-text-muted: #c9c9c9;
     --color-loading-text: #555;
+
+    --color-primary: #e7706c;
+    --color-primary-hover: #d65f5a;
+    --color-outline-hover: #3b3b3b;
+    --color-outline-input-border: #535353;
+    --color-chip: #4e4e4e;
   }
 }
 

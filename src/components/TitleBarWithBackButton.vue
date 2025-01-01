@@ -36,4 +36,12 @@ function goBack() {
   padding: 0.5rem;
   cursor: pointer;
 }
+
+.back-button svg {
+  color: var(--color-text);
+}
+
+.back-button:hover svg {
+  color: var(--color-text-muted);
+}
 </style>
