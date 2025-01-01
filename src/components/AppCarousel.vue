@@ -40,23 +40,24 @@ const canScrollRight = computed(
   () => canScroll.value && translateX.value > carouselWidth.value - slidesWidth.value,
 )
 
+const isDragging = ref(false)
+
 let startX = 0
 let currentTranslateX = 0
-let isDragging = false
 let lastUpdate = 0
 const THROTTLE_DELAY = 16 // Approximately 60fps
 
 function onTouchStart(event: TouchEvent | MouseEvent) {
   startX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
   currentTranslateX = translateX.value
-  isDragging = true
+  isDragging.value = true
   if (carouselElement.value) {
     carouselElement.value.style.transition = 'none' // Disable transition during drag to avoid lagging
   }
 }
 
 function onTouchMove(event: TouchEvent | MouseEvent) {
-  if (!isDragging) return
+  if (!isDragging.value) return
 
   const now = Date.now()
   if (now - lastUpdate < THROTTLE_DELAY) return
@@ -72,8 +73,8 @@ function onTouchMove(event: TouchEvent | MouseEvent) {
 }
 
 function onTouchEnd() {
-  if (!isDragging) return
-  isDragging = false
+  if (!isDragging.value) return
+  isDragging.value = false
   if (carouselElement.value) {
     carouselElement.value.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)' // Re-enable transition with bounce effect
   }
