@@ -181,6 +181,11 @@ onBeforeUnmount(() => {
 
 .carousel-item {
   cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-item:hover {
+  opacity: 0.65;
 }
 
 .carousel-slides img {
