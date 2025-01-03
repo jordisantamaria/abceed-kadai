@@ -7,11 +7,6 @@ const router = createRouter({
   routes: [
     { path: '/', component: BookListView },
     { path: '/book/:id', component: BookDetailView },
-    // {
-    //   path: '/:pathMatch(.*)*', // Capture all not defined routes
-    //   name: 'NotFound',
-    //   component: NotFoundView,
-    // },
   ],
 })
 

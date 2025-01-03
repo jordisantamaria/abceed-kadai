@@ -35,8 +35,8 @@ interface ImageCarouselProps {
   slides: {
     imgUrl: string
     href: string
-    id?: string // Optional book ID
-    name?: string // Optional book name for img alt
+    id?: string
+    name?: string
   }[]
   slideWidth: number
   spaceBetweenSlides: number

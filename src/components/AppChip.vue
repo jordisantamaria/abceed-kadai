@@ -19,6 +19,6 @@ defineProps<{
   text-align: center;
   color: var(--color-text-muted);
   background-color: var(--color-chip);
-  border-radius: 2px; /* Border radius */
+  border-radius: 2px;
 }
 </style>

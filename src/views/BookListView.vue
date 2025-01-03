@@ -61,8 +61,8 @@ onMounted(async () => {
 .carousel-item {
   cursor: pointer;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
   transition: opacity 0.3s ease;
 }
 

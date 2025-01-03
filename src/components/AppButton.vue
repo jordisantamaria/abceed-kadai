@@ -61,7 +61,6 @@ const buttonClass = computed(() => ({
 }
 
 .app-button--primary:hover {
-  /* Hover effects for primary and outline-primary */
   background: var(--color-primary-hover);
 }
 
