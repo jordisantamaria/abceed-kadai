@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, nextTick } from 'vue'
 import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
 import router from '@/router'
 
@@ -136,8 +136,35 @@ function updateCarouselWidth() {
   }
 }
 
+// Sometimes it's not calculating corectly the slides width, so we need to wait for the images to load
+function updateDimensionsAfterImagesLoad() {
+  const images = carouselElement.value?.querySelectorAll('img') || []
+  let loadedImagesCount = 0
+
+  images.forEach((img) => {
+    if (img.complete) {
+      loadedImagesCount++
+    } else {
+      img.addEventListener('load', () => {
+        loadedImagesCount++
+        if (loadedImagesCount === images.length) {
+          nextTick(() => {
+            updateCarouselWidth()
+          })
+        }
+      })
+    }
+  })
+
+  if (loadedImagesCount === images.length) {
+    nextTick(() => {
+      updateCarouselWidth()
+    })
+  }
+}
+
 onMounted(() => {
-  updateCarouselWidth()
+  updateDimensionsAfterImagesLoad()
   window.addEventListener('resize', updateCarouselWidth)
   if (carouselElement.value) {
     carouselElement.value.addEventListener('touchstart', onTouchStart)
