@@ -8,7 +8,9 @@ export const useBooksStore = defineStore('books', () => {
 
   async function fetchBooks() {
     const response = await axios.get('https://dev-app-api.abceed.com/mock/book/all')
-    books.value = response.data.top_category_list
+    books.value = (response.data.top_category_list as TopCategory[]).filter(
+      (category) => category.name_category === 'すべて',
+    )
     return books.value
   }
 
