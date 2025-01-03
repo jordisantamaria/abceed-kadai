@@ -182,6 +182,9 @@ onBeforeUnmount(() => {
 .carousel-item {
   cursor: pointer;
   transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carousel-item:hover {
