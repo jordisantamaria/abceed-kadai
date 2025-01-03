@@ -9,13 +9,15 @@
       >
         <div v-for="subCategory in category.sub_category_list" :key="subCategory.id_category">
           <h2 class="category-title">{{ subCategory.name_category }}</h2>
-          <AppCarousel :slides="subCategory.book_list" :slideWidth="106">
-            <template v-slot:default="{ slide }: any">
-              <div class="carousel-item" @click="goToDetail(slide.id_book)">
-                <img :src="slide.img_url" alt="Slide Image" style="width: 90px" />
-              </div>
-            </template>
-          </AppCarousel>
+          <AppCarousel
+            :slides="
+              subCategory.book_list.map((book) => ({
+                imgUrl: book.img_url,
+                href: `/book/${book.id_book}`,
+              }))
+            "
+            :slideWidth="106"
+          />
         </div>
       </div>
     </div>
@@ -24,14 +26,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useBooksStore } from '@/stores/books'
 import type { TopCategory } from '@/types/BookTypes'
 import AppCarousel from '@/components/AppCarousel.vue'
 import MainContainer from '@/components/MainContainer.vue'
 
 const booksStore = useBooksStore()
-const router = useRouter()
 const topCategories = ref<TopCategory[]>([])
 const loading = ref(true)
 
@@ -48,15 +48,8 @@ onMounted(async () => {
     loading.value = false
   }
 })
-
-const goToDetail = (id: string) => {
-  if (id) {
-    router.push(`/book/${id}`)
-  } else {
-    console.error('Invalid book ID:', id)
-  }
-}
 </script>
+
 <style scoped>
 .book-list-container {
   padding: 2rem;

@@ -4,8 +4,13 @@
       <IconChevronLeft />
     </button>
     <div class="carousel-slides" :style="{ transform: `translateX(${translateX}px)` }">
-      <div v-for="(slide, index) in slides" :key="index">
-        <slot :slide="slide" />
+      <div
+        v-for="(slide, index) in slides"
+        :key="index"
+        @click="handleClick(slide.href)"
+        class="carousel-item"
+      >
+        <img :src="slide.imgUrl" alt="Carousel Image" style="width: 90px" />
       </div>
     </div>
     <button v-if="canScrollRight" class="carousel-arrow right" @click="moveRight">
@@ -17,13 +22,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
+import router from '@/router'
 
-interface ImageCarouselProps<T> {
-  slides: T[]
+interface ImageCarouselProps {
+  slides: { imgUrl: string; href: string }[]
   slideWidth: number
 }
 
-const props = defineProps<ImageCarouselProps<unknown>>()
+const props = defineProps<ImageCarouselProps>()
 
 const translateX = ref(0)
 const carouselWidth = ref(0)
@@ -37,6 +43,7 @@ const canScrollRight = computed(
 )
 
 const isDragging = ref(false)
+let dragDistance = 0
 
 let startX = 0
 let currentTranslateX = 0
@@ -47,6 +54,7 @@ function onTouchStart(event: TouchEvent | MouseEvent) {
   startX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
   currentTranslateX = translateX.value
   isDragging.value = true
+  dragDistance = 0
   if (carouselElement.value) {
     carouselElement.value.style.transition = 'none' // Disable transition during drag to avoid lagging
   }
@@ -61,6 +69,7 @@ function onTouchMove(event: TouchEvent | MouseEvent) {
 
   const currentX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
   const deltaX = currentX - startX
+  dragDistance = deltaX
   translateX.value = currentTranslateX + deltaX
 
   // Clamp the translateX value to prevent overscrolling
@@ -81,6 +90,13 @@ function onTouchEnd() {
     } else if (movedBy > 0 && canScrollLeft.value) {
       moveLeft()
     }
+  }
+}
+
+function handleClick(href: string) {
+  if (Math.abs(dragDistance) < 5) {
+    // Threshold to determine if it was a click or drag
+    router.push(href)
   }
 }
 
@@ -132,7 +148,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .carousel {
   position: relative;
   width: 100%;
@@ -145,7 +161,11 @@ onBeforeUnmount(() => {
   width: 100%;
   gap: 16px;
   user-select: none;
-  transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1); /* Default transition */
+  transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1);
+}
+
+.carousel-item {
+  cursor: pointer;
 }
 
 .carousel-slides img {
@@ -160,7 +180,7 @@ onBeforeUnmount(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 50px; /* Adjust width as needed */
+  width: 50px;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
   color: white;
   border: none;
