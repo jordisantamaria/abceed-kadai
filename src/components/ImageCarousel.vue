@@ -3,14 +3,21 @@
     <button v-if="canScrollLeft" class="carousel-arrow left" @click="moveLeft">
       <IconChevronLeft />
     </button>
-    <div class="carousel-slides" :style="{ transform: `translateX(${translateX}px)` }">
+    <div
+      class="carousel-slides"
+      :style="{ transform: `translateX(${translateX}px)`, gap: `${props.spaceBetweenSlides}px` }"
+    >
       <div
         v-for="(slide, index) in slides"
         :key="slide.id || index"
         @click="handleClick(slide.href)"
         class="carousel-item"
       >
-        <img :src="slide.imgUrl" :alt="slide.name || 'Carousel Image'" style="width: 90px" />
+        <img
+          :src="slide.imgUrl"
+          :alt="slide.name || 'Carousel Image'"
+          :style="{ width: `${props.slideWidth}px` }"
+        />
       </div>
     </div>
     <button v-if="canScrollRight" class="carousel-arrow right" @click="moveRight">
@@ -32,6 +39,7 @@ interface ImageCarouselProps {
     name?: string // Optional book name for img alt
   }[]
   slideWidth: number
+  spaceBetweenSlides: number
 }
 
 const props = defineProps<ImageCarouselProps>()
@@ -107,14 +115,17 @@ function handleClick(href: string) {
 
 function moveLeft() {
   if (canScrollLeft.value) {
-    translateX.value = Math.min(translateX.value + props.slideWidth, 0)
+    translateX.value = Math.min(translateX.value + (props.slideWidth + props.spaceBetweenSlides), 0)
   }
 }
 
 function moveRight() {
   if (canScrollRight.value) {
     const maxNegativeTranslateX = Math.min(0, carouselWidth.value - slidesWidth.value)
-    translateX.value = Math.max(translateX.value - props.slideWidth, maxNegativeTranslateX)
+    translateX.value = Math.max(
+      translateX.value - (props.slideWidth + props.spaceBetweenSlides),
+      maxNegativeTranslateX,
+    )
   }
 }
 
@@ -164,7 +175,6 @@ onBeforeUnmount(() => {
 .carousel-slides {
   display: flex;
   width: 100%;
-  gap: 16px;
   user-select: none;
   transition: transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1);
 }

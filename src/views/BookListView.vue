@@ -18,7 +18,8 @@
                 id: book.id_book,
               }))
             "
-            :slideWidth="106"
+            :slideWidth="90"
+            :spaceBetweenSlides="16"
           />
         </div>
       </div>
