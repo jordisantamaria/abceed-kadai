@@ -9,11 +9,13 @@
       >
         <div v-for="subCategory in category.sub_category_list" :key="subCategory.id_category">
           <h2 class="category-title">{{ subCategory.name_category }}</h2>
-          <AppCarousel
+          <ImageCarousel
             :slides="
               subCategory.book_list.map((book) => ({
                 imgUrl: book.img_url,
                 href: `/book/${book.id_book}`,
+                name: book.name_book,
+                id: book.id_book,
               }))
             "
             :slideWidth="106"
@@ -28,8 +30,8 @@
 import { ref, onMounted } from 'vue'
 import { useBooksStore } from '@/stores/books'
 import type { TopCategory } from '@/types/BookTypes'
-import AppCarousel from '@/components/AppCarousel.vue'
 import MainContainer from '@/components/MainContainer.vue'
+import ImageCarousel from '@/components/ImageCarousel.vue'
 
 const booksStore = useBooksStore()
 const topCategories = ref<TopCategory[]>([])

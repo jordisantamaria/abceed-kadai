@@ -5,7 +5,7 @@
       <MainContainer class="book-detail-container">
         <!-- Left -->
         <div class="book-info-container">
-          <img class="book-image" :src="book?.img_url" />
+          <img class="book-image" :src="book?.img_url" :alt="book?.name_book" />
           <div>
             <h1 class="book-title">{{ book?.name_book }}</h1>
             <dl>

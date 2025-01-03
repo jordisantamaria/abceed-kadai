@@ -6,11 +6,11 @@
     <div class="carousel-slides" :style="{ transform: `translateX(${translateX}px)` }">
       <div
         v-for="(slide, index) in slides"
-        :key="index"
+        :key="slide.id || index"
         @click="handleClick(slide.href)"
         class="carousel-item"
       >
-        <img :src="slide.imgUrl" alt="Carousel Image" style="width: 90px" />
+        <img :src="slide.imgUrl" :alt="slide.name || 'Carousel Image'" style="width: 90px" />
       </div>
     </div>
     <button v-if="canScrollRight" class="carousel-arrow right" @click="moveRight">
@@ -25,7 +25,12 @@ import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
 import router from '@/router'
 
 interface ImageCarouselProps {
-  slides: { imgUrl: string; href: string }[]
+  slides: {
+    imgUrl: string
+    href: string
+    id?: string // Optional book ID
+    name?: string // Optional book name for img alt
+  }[]
   slideWidth: number
 }
 
