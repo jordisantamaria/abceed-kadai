@@ -44,24 +44,27 @@ interface ImageCarouselProps {
 
 const props = defineProps<ImageCarouselProps>()
 
-const translateX = ref(0)
-const carouselWidth = ref(0)
-const slidesWidth = ref(0)
-const carouselElement = ref<HTMLElement | null>(null)
+// Reactive variables
+const translateX = ref(0) // Current horizontal translation of the carousel
+const carouselWidth = ref(0) // Width of the carousel container, changes on resize
+const slidesWidth = ref(0) // Total width of all slides combined, changes on slides length and slides width
+const carouselElement = ref<HTMLElement | null>(null) // Reference to the carousel DOM element
+const isDragging = ref(false)
 
+// Computed properties
 const canScroll = computed(() => slidesWidth.value > carouselWidth.value)
 const canScrollLeft = computed(() => canScroll.value && translateX.value < 0)
 const canScrollRight = computed(
   () => canScroll.value && translateX.value > carouselWidth.value - slidesWidth.value,
 )
 
-const isDragging = ref(false)
-let dragDistance = 0
+let dragDistance = 0 // Distance dragged by the user, required to allow for click on the carousel
 
-let startX = 0
-let currentTranslateX = 0
-let lastUpdate = 0
-const THROTTLE_DELAY = 16 // Approximately 60fps
+// Variables for handling drag events
+let startX = 0 // Starting screen X position of the drag
+let currentTranslateX = 0 // CSS TranslateX pixels value at the start of the user drag movement
+let lastUpdate = 0 // Timestamp of the last update for throttling
+const THROTTLE_DELAY = 16 // Delay for throttling updates (approx. 60fps)
 
 function onTouchStart(event: TouchEvent | MouseEvent) {
   startX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
@@ -69,7 +72,7 @@ function onTouchStart(event: TouchEvent | MouseEvent) {
   isDragging.value = true
   dragDistance = 0
   if (carouselElement.value) {
-    carouselElement.value.style.transition = 'none' // Disable transition during drag to avoid lagging
+    carouselElement.value.style.transition = 'none' // Disable transition during drag
   }
 }
 
@@ -77,15 +80,15 @@ function onTouchMove(event: TouchEvent | MouseEvent) {
   if (!isDragging.value) return
 
   const now = Date.now()
-  if (now - lastUpdate < THROTTLE_DELAY) return
+  if (now - lastUpdate < THROTTLE_DELAY) return // Throttle updates
   lastUpdate = now
 
   const currentX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
-  const deltaX = currentX - startX
-  dragDistance = deltaX
-  translateX.value = currentTranslateX + deltaX
+  const deltaX = currentX - startX // Change in X position
+  dragDistance = deltaX // Update drag distance
+  translateX.value = currentTranslateX + deltaX // Update translateX
 
-  // Clamp the translateX value to prevent overscrolling
+  // Clamp translateX to prevent overscrolling over the limits
   const maxNegativeTranslateX = Math.min(0, carouselWidth.value - slidesWidth.value)
   translateX.value = Math.max(Math.min(translateX.value, 0), maxNegativeTranslateX)
 }
@@ -94,10 +97,11 @@ function onTouchEnd() {
   if (!isDragging.value) return
   isDragging.value = false
   if (carouselElement.value) {
-    carouselElement.value.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)' // Re-enable transition with bounce effect
+    carouselElement.value.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)' // Re-enable transition
   }
-  const movedBy = translateX.value - currentTranslateX
+  const movedBy = translateX.value - currentTranslateX // Total movement
   if (Math.abs(movedBy) > props.slideWidth * 0.35) {
+    // If movement is enough, scroll to next item
     if (movedBy < 0 && canScrollRight.value) {
       moveRight()
     } else if (movedBy > 0 && canScrollLeft.value) {
@@ -108,7 +112,7 @@ function onTouchEnd() {
 
 function handleClick(href: string) {
   if (Math.abs(dragDistance) < 5) {
-    // Threshold to determine if it was a click or drag
+    // If not dragged significantly, treat as click
     router.push(href)
   }
 }
@@ -136,7 +140,7 @@ function updateCarouselWidth() {
   }
 }
 
-// Sometimes it's not calculating corectly the slides width, so we need to wait for the images to load
+// Update dimensions after images load
 function updateDimensionsAfterImagesLoad() {
   const images = carouselElement.value?.querySelectorAll('img') || []
   let loadedImagesCount = 0
@@ -222,10 +226,6 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
-.no-pointer-events {
-  pointer-events: none;
-}
-
 .carousel-arrow {
   position: absolute;
   top: 0;
@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
   border: none;
   cursor: pointer;
   z-index: 1;
-  display: none; /* Hide by default */
+  display: none; /* Hide arrows by default */
   align-items: center;
   justify-content: center;
 }
@@ -257,6 +257,6 @@ onBeforeUnmount(() => {
 }
 
 .carousel:hover .carousel-arrow {
-  display: flex; /* Show on hover */
+  display: flex; /* Show arrows on hover */
 }
 </style>

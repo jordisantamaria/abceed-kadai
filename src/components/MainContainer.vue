@@ -19,7 +19,6 @@ defineProps<{
   padding-right: 1rem;
   font-weight: normal;
   @media (min-width: 768px) {
-    padding: 0;
     padding-left: 2rem;
     padding-right: 2rem;
   }
